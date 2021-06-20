@@ -22,16 +22,57 @@ const FilmContainer = () => {
     }
 
     const getUnwatchedFilms = function() {
+        console.log("I'm running!")
         let filmsList = [...films]
         let watchedFilmsList = [...watchedFilms]
         let unwatchedFilmsList = [...unwatchedFilms]
-        for(let film of filmsList){
-            for(let watchedFilm of watchedFilmsList){
-                if(watchedFilm !== film){
-                    unwatchedFilmsList.push(film)
-                }        
+        let filmAlreadyEntered = null;
+        if(unwatchedFilmsList == 0){
+            for(let film of filmsList){
+                for(let watchedFilm of watchedFilmsList){
+                    if(watchedFilm !== film){
+                        unwatchedFilmsList.push(film)
+                    }
+                }
             }
         }
+        if(unwatchedFilmsList !== 0){
+            console.log("there are already films")
+            // for(let film of filmsList){
+            //     for(let watchedFilm of watchedFilmsList){
+            //         if(watchedFilm !== film){
+            //             for(let existingUnwatchedFilm of unwatchedFilmsList){
+            //                 if(existingUnwatchedFilm !== film){
+            //                     unwatchedFilmsList.push(film)
+            //                 }
+            //                 else{
+            //                     console.log("already there")
+            //                 }
+            //             } 
+            //         }
+            //     }
+            // }
+        }
+                    
+                       
+
+
+        
+                    // if(unwatchedFilmsList == 0){
+                     
+                    // else{
+                    //     console.log("there are unwatched films")
+                        // for(let existingFilm of unwatchedFilmsList){
+                        //     console.log(existingFilm)
+                        //     if(watchedFilm !== existingFilm){
+                        //         console.log("didnt find it")
+                        //         filmAlreadyEntered = false;
+                        //     }
+                        //     if(filmAlreadyEntered === false){
+                        //         unwatchedFilmsList.push(film)
+                        //     }
+                        // }
+         
         setUnwatchedFilms(unwatchedFilmsList)
     }
 
@@ -45,9 +86,19 @@ const FilmContainer = () => {
 
     const onWatchedChecked = (foundFilm) => {
         let watchedList = [...watchedFilms]
-        watchedList.push(foundFilm)
-        setWatchedFilms(watchedList)
-        getUnwatchedFilms();
+        let filmExists = false;
+        for(let film of watchedList){
+            if(film.id === foundFilm.id){
+                filmExists = true;
+                console.log("I'm here")
+            }
+        }
+        if(filmExists === false){
+            watchedList.push(foundFilm)
+            setWatchedFilms(watchedList)            
+        }
+        
+        // getUnwatchedFilms();
     }
     
 return (
