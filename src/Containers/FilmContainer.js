@@ -11,14 +11,32 @@ const FilmContainer = () => {
     const[unwatchedFilms, setUnwatchedFilms] = useState([]);
 
     useEffect(() => {
-        getFilms();
-        getUnwatchedFilms();
-    }, [watchedFilms])
+        getFilms(); 
+    }, [])
+
+    // useEffect(() => {
+    //     setInitialWatchedValue(); 
+    // }, [])
+
+    // useEffect(() => {
+    //     getUnwatchedFilms();
+    // }, [watchedFilms])
 
     const getFilms = function(){
         fetch('https://ghibliapi.herokuapp.com/films')
         .then(res=>res.json())
         .then(films => setFilms(films))
+        .then(setInitialWatchedValue())
+    }
+
+    const setInitialWatchedValue = function() {
+        console.log("I ran")
+        let filmsList = [...films]
+        for(let film of filmsList){
+            console.log("running over here")
+            film.watched = false;   
+        }
+        setFilms(filmsList);
     }
 
     const getUnwatchedFilms = function() {
@@ -27,7 +45,7 @@ const FilmContainer = () => {
         let watchedFilmsList = [...watchedFilms]
         let unwatchedFilmsList = [...unwatchedFilms]
         let filmAlreadyEntered = null;
-        if(unwatchedFilmsList == 0){
+        if(unwatchedFilmsList === 0){
             for(let film of filmsList){
                 for(let watchedFilm of watchedFilmsList){
                     if(watchedFilm !== film){
@@ -38,40 +56,10 @@ const FilmContainer = () => {
         }
         if(unwatchedFilmsList !== 0){
             console.log("there are already films")
-            // for(let film of filmsList){
-            //     for(let watchedFilm of watchedFilmsList){
-            //         if(watchedFilm !== film){
-            //             for(let existingUnwatchedFilm of unwatchedFilmsList){
-            //                 if(existingUnwatchedFilm !== film){
-            //                     unwatchedFilmsList.push(film)
-            //                 }
-            //                 else{
-            //                     console.log("already there")
-            //                 }
-            //             } 
-            //         }
-            //     }
-            // }
+
         }
-                    
-                       
-
-
-        
-                    // if(unwatchedFilmsList == 0){
-                     
-                    // else{
-                    //     console.log("there are unwatched films")
-                        // for(let existingFilm of unwatchedFilmsList){
-                        //     console.log(existingFilm)
-                        //     if(watchedFilm !== existingFilm){
-                        //         console.log("didnt find it")
-                        //         filmAlreadyEntered = false;
-                        //     }
-                        //     if(filmAlreadyEntered === false){
-                        //         unwatchedFilmsList.push(film)
-                        //     }
-                        // }
+                   
+               
          
         setUnwatchedFilms(unwatchedFilmsList)
     }
@@ -90,10 +78,11 @@ const FilmContainer = () => {
         for(let film of watchedList){
             if(film.id === foundFilm.id){
                 filmExists = true;
-                console.log("I'm here")
             }
         }
         if(filmExists === false){
+            foundFilm.watched = true;
+            console.log(foundFilm)
             watchedList.push(foundFilm)
             setWatchedFilms(watchedList)            
         }
